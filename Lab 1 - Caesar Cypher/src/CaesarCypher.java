@@ -1,4 +1,14 @@
 public class CaesarCypher {
+    private char[] uppercaseLetters = new char[26];
+
+    public CaesarCypher() {
+        char currentLetter = 'A';
+        for (int i = 0; i < 26; i++) {
+            uppercaseLetters[i] = currentLetter;
+            currentLetter++;
+        }
+    }
+
     public boolean checkMessageValidity(String message) {
         for (char c : message.toCharArray()) {
             if (((c < 'A' || c > 'Z') && (c < 'a' || c > 'z'))) {
@@ -18,10 +28,27 @@ public class CaesarCypher {
         return false;
     }
 
-    public void encryptMessage(String message) {
+    public void processMessage(String message, String key, boolean isEncrypting) {
+        StringBuilder resultMessage = new StringBuilder();
         String transformedMessage = message.replaceAll("\\s", "").toUpperCase();
+        System.out.println("Message to " + (isEncrypting ? "encrypt" : "decrypt") + ": " + transformedMessage);
+        int shift = Integer.parseInt(key);
+        if (!isEncrypting) {
+            shift = 26 - shift;
+        }
+        for (char c : transformedMessage.toCharArray()) {
+            char processedChar = (char) ('A' + (c - 'A' + shift) % 26);
+            resultMessage.append(processedChar);
+        }
+        System.out.println((isEncrypting ? "Encrypted" : "Decrypted") + " message: " + resultMessage.toString());
+    }
 
-        System.out.println(transformedMessage);
+    public void encryptMessage(String message, String key) {
+        processMessage(message, key, true);
+    }
+
+    public void decryptMessage(String message, String key) {
+        processMessage(message, key, false);
     }
 
     private boolean isValidIntString(String str) {
