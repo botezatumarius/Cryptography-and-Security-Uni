@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Boolean isRunning = true;
+        Boolean optionNotChosen = true;
         EncryptionData data = new EncryptionData();
         clearScreen();
         while (isRunning) {
@@ -15,8 +16,21 @@ public class Main {
                         isRunning = false;
                         break;
                     case "1":
-                        isRunning = checkMessageAndKeyValidity(data, cypher, sc);
-                        cypher.encryptMessage(data.messageToEncrypt, data.key);
+                        clearScreen();
+                        while (optionNotChosen) {
+                            System.out.println("1 - 1 key\n2 - 2 keys");
+                            String option2 = sc.nextLine();
+                            switch (option2) {
+                                case "1":
+                                    isRunning = checkMessageAndKeyValidity(data, cypher, sc);
+                                    cypher.encryptMessage(data.messageToEncrypt, data.key);
+                                    optionNotChosen = false;
+                                    break;
+                                default:
+                                    System.out.println("Please choose either 1 or 2 keys");
+                                    break;
+                            }
+                        }
                         break;
                     case "2":
                         isRunning = checkMessageAndKeyValidity(data, cypher, sc);

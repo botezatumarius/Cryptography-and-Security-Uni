@@ -1,10 +1,12 @@
+import java.util.HashMap;
+
 public class CaesarCypher {
-    private char[] uppercaseLetters = new char[26];
+    HashMap<Integer, Character> alphabet = new HashMap<Integer, Character>();
 
     public CaesarCypher() {
         char currentLetter = 'A';
         for (int i = 0; i < 26; i++) {
-            uppercaseLetters[i] = currentLetter;
+            alphabet.put(i, currentLetter);
             currentLetter++;
         }
     }
@@ -37,7 +39,7 @@ public class CaesarCypher {
             shift = 26 - shift;
         }
         for (char c : transformedMessage.toCharArray()) {
-            char processedChar = (char) ('A' + (c - 'A' + shift) % 26);
+            char processedChar = alphabet.get((c - 'A' + shift) % 26);
             resultMessage.append(processedChar);
         }
         System.out.println((isEncrypting ? "Encrypted" : "Decrypted") + " message: " + resultMessage.toString());
