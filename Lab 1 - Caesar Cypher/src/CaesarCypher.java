@@ -30,27 +30,76 @@ public class CaesarCypher {
         return false;
     }
 
-    public void processMessage(String message, String key, boolean isEncrypting) {
+    public Boolean checkKey2Validity(String key) {
+        if (containsOnlyLatinCharacters(key) && key.length() >= 7)
+            return true;
+        return false;
+    }
+
+    private boolean containsOnlyLatinCharacters(String str) {
+        return str.matches("[a-zA-Z]+");
+    }
+
+    private void modifyAlphabet(String key2) {
+        HashMap<Integer, Character> alphabetCopy = new HashMap<Integer, Character>();
+        int position = 0;
+        for (char c : key2.toCharArray()) {
+            if (!alphabetCopy.containsValue(Character.toUpperCase(c))) {
+                alphabetCopy.put(position, Character.toUpperCase(c));
+                position++;
+            }
+        }
+        char currentLetter = 'A';
+        for (int i = 0; i < 26; i++) {
+            if (!alphabetCopy.containsValue(currentLetter)) {
+                alphabetCopy.put(position, currentLetter);
+                position++;
+            }
+            currentLetter++;
+        }
+        alphabet.clear();
+        alphabet.putAll(alphabetCopy);
+        System.out.print("Modified alphabet:");
+        for (HashMap.Entry<Integer, Character> entry : alphabet.entrySet()) {
+            Character value = entry.getValue();
+            System.out.print(value);
+        }
+        System.out.println("");
+    }
+
+    public void processMessage(String message, String key, boolean isEncrypting, String key2) {
         StringBuilder resultMessage = new StringBuilder();
         String transformedMessage = message.replaceAll("\\s", "").toUpperCase();
+        if (!key2.equals("1")) {
+            modifyAlphabet(key2);
+        }
         System.out.println("Message to " + (isEncrypting ? "encrypt" : "decrypt") + ": " + transformedMessage);
         int shift = Integer.parseInt(key);
         if (!isEncrypting) {
             shift = 26 - shift;
         }
+        Integer target = 0;
         for (char c : transformedMessage.toCharArray()) {
-            char processedChar = alphabet.get((c - 'A' + shift) % 26);
+            for (HashMap.Entry<Integer, Character> entry : alphabet.entrySet()) {
+                Character value = entry.getValue();
+                Integer charOrder = entry.getKey();
+                if (c == value) {
+                    target = charOrder;
+                    break;
+                }
+            }
+            char processedChar = alphabet.get((target + shift) % 26);
             resultMessage.append(processedChar);
         }
         System.out.println((isEncrypting ? "Encrypted" : "Decrypted") + " message: " + resultMessage.toString());
     }
 
-    public void encryptMessage(String message, String key) {
-        processMessage(message, key, true);
+    public void encryptMessage(String message, String key, String key2) {
+        processMessage(message, key, true, key2);
     }
 
-    public void decryptMessage(String message, String key) {
-        processMessage(message, key, false);
+    public void decryptMessage(String message, String key, String key2) {
+        processMessage(message, key, false, key2);
     }
 
     private boolean isValidIntString(String str) {

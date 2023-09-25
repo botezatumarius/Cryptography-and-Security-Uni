@@ -23,7 +23,13 @@ public class Main {
                             switch (option2) {
                                 case "1":
                                     isRunning = checkMessageAndKeyValidity(data, cypher, sc);
-                                    cypher.encryptMessage(data.messageToEncrypt, data.key);
+                                    cypher.encryptMessage(data.messageToEncrypt, data.key, "1");
+                                    optionNotChosen = false;
+                                    break;
+                                case "2":
+                                    isRunning = checkMessageAndKeyValidity(data, cypher, sc);
+                                    checkKey2Validity(data, cypher, sc);
+                                    cypher.encryptMessage(data.messageToEncrypt, data.key, data.key2);
                                     optionNotChosen = false;
                                     break;
                                 default:
@@ -34,7 +40,7 @@ public class Main {
                         break;
                     case "2":
                         isRunning = checkMessageAndKeyValidity(data, cypher, sc);
-                        cypher.decryptMessage(data.messageToEncrypt, data.key);
+                        cypher.decryptMessage(data.messageToEncrypt, data.key, "1");
                         break;
                     default:
                         clearScreen();
@@ -66,12 +72,24 @@ public class Main {
             data.key = sc.nextLine();
             if (!cypher.checkKeyValidity(data.key)) {
                 clearScreen();
-                System.out.println("Please introduce a valid key");
+                System.out.println("Please introduce a valid key (1-25)");
             } else
                 data.keyNotValid = false;
 
         }
         return false;
+    }
+
+    public static void checkKey2Validity(EncryptionData data, CaesarCypher cypher, Scanner sc) {
+        System.out.println("Introduce a second key with only latin characters, and a size of at least 7");
+        while (data.key2NotValid) {
+            data.key2 = sc.nextLine();
+            if (!cypher.checkKey2Validity(data.key2)) {
+                clearScreen();
+                System.out.println("Please introduce a valid key with only latin characters, and a size of at least 7");
+            } else
+                data.key2NotValid = false;
+        }
     }
 }
 
@@ -79,5 +97,7 @@ class EncryptionData {
     Boolean messageNotValid = true;
     String messageToEncrypt = "";
     Boolean keyNotValid = true;
+    Boolean key2NotValid = true;
     String key = "";
+    String key2 = "";
 }
