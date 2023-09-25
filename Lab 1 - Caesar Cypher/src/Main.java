@@ -39,8 +39,27 @@ public class Main {
                         }
                         break;
                     case "2":
-                        isRunning = checkMessageAndKeyValidity(data, cypher, sc);
-                        cypher.decryptMessage(data.messageToEncrypt, data.key, "1");
+                        clearScreen();
+                        while (optionNotChosen) {
+                            System.out.println("1 - 1 key\n2 - 2 keys");
+                            String option2 = sc.nextLine();
+                            switch (option2) {
+                                case "1":
+                                    isRunning = checkMessageAndKeyValidity(data, cypher, sc);
+                                    cypher.decryptMessage(data.messageToEncrypt, data.key, "1");
+                                    optionNotChosen = false;
+                                    break;
+                                case "2":
+                                    isRunning = checkMessageAndKeyValidity(data, cypher, sc);
+                                    checkKey2Validity(data, cypher, sc);
+                                    cypher.decryptMessage(data.messageToEncrypt, data.key, data.key2);
+                                    optionNotChosen = false;
+                                    break;
+                                default:
+                                    System.out.println("Please choose either 1 or 2 keys");
+                                    break;
+                            }
+                        }
                         break;
                     default:
                         clearScreen();
