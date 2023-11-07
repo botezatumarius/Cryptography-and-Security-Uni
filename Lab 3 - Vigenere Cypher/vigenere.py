@@ -11,22 +11,23 @@ def perform_cipher(action):
         if set(key).issubset(set(romanian_alphabet)) and len(key) >= 7:
             break
         else:
-            print('The key should only contain letters of the Romanian alphabet and have a length of at least 7. Try again.')
+            print(
+                'Key must only have letters of the romanian alphabet and have a length of at least 7. ')
 
     if action == 1:
-        operation = 'encrypt'
+        op = 'encrypt'
     elif action == 2:
-        operation = 'decrypt'
+        op = 'decrypt'
 
     while True:
-        text = input(f'Enter the text you want to {operation}: ')
+        text = input(f'Enter the message you want to {op}: ')
         text = text.replace(' ', '').upper()
 
         if set(text).issubset(set(romanian_alphabet)):
             break
         else:
             print(
-                'The text should only contain letters of the Romanian alphabet. Try again.')
+                'Only romanian alphabet letters are allowed. ')
 
     for i, char in enumerate(text):
         shift = romanian_alphabet.find(key[i % len(key)])
@@ -58,4 +59,4 @@ while True:
             print('\nInput is invalid.')
 
     except ValueError:
-        print('\nInput is invalid. Try again')
+        print('\nInput is invalid')
